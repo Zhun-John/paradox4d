@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{6994a3ae-d49e-4121-a625-52cf4eb0a861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{e159c2d3-fa29-467a-a2eb-5f5c94d3d632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL">
+      <UniqueIdentifier>{3ad90940-a24d-4989-bc93-2f1e189810eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{c3a454bf-ee52-41d6-be85-a89bbf52546b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\MazeData.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\TipsData.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Vector3.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Auto3DCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Free3DCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Plain2DCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\global.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Items4D.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maze4D.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Index4.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glResouce.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tips.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Progression.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
