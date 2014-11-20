@@ -57,7 +57,7 @@ public:
 		}
 		else if (level==3)
 		{
-			PlaceItem('a',2,2,4,'A');
+			PlaceItem('Y',3,4,0,'A');
 			PlaceItem('b',2,2,6,'A');
 			PlaceItem('c',2,2,7,'A');
 			PlaceItem('d',0,0,7,'A');

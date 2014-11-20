@@ -9,7 +9,7 @@ public:
 		//每个物品会在首次接触后解锁，但首次接触时应持续显示Hud台词直到离开
 	char prevItem;		// 玩家接触的上一个物体，可能因为移动到新方格，或在当前格子摆放物体
 public:
-	CProgression(void):currentLevel(1),levelSum(5){
+	CProgression(void):currentLevel(3),levelSum(5){
 		memset(itemLocked,0,sizeof(itemLocked));
 	}
 

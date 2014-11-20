@@ -22,7 +22,8 @@ public:
 	void Init();
 
     //根据物体，在空间中渲染其对应的3D文字
-    void Render3DTips(char item){
+	void Render3DTips(char item){
+		glPushMatrix();
 		glEnable(GL_BLEND);	//透视/色
 		glBlendFunc(GL_DST_ALPHA,GL_ONE);
 		glEnable(GL_TEXTURE_2D);
@@ -35,37 +36,30 @@ public:
 		glScaled(0.7, 0.5, 0.7);
 		if( item>='1' && item<='9')//路标 一二三四五六七八九
 		{
-			glPushMatrix();
 			glScaled(0.7, 0.7, 0.7);
 			glRotated((GetTickCount()/10)%360,0,1,0);
 			glTranslated(-0.5,-0.7,0);
 			int i=item-'1';// i is in [0,8]
 			glColor3d( 1-i*0.125, 1-i*0.125, i*0.125);
 			glCallList(font3D[0][item-'0']);
-			glPopMatrix();
 		}
 		else if( item=='{' || item=='}' )//“起点” “终点”
 		{
-			glPushMatrix();
 			glRotated((GetTickCount()/10)%360,0,1,0);
 			glTranslated(0,-0.7,0);
 			glColor3d((item=='}'), (item=='{'), 0);
 			Draw3DString(item=='{'? 1:2);
-			glPopMatrix();
 		}
 		else if (item>='a' && item<='z')//"提示"
 		{
-			glPushMatrix();
 			glRotated((GetTickCount()/10)%360,0,1,0);
 			glTranslated(0,-0.7,0);
 			glColor3d(1,0,1);
 			Draw3DString(3);
-			glPopMatrix();
 		}
 	// 3D字体台词
 		else if ( item=='Z' )
 		{
-			glPushMatrix();
 			glRotated((GetTickCount()/30)%360,0,1,0);
 			glTranslated(0,0.1,0);
 			glColor3d(0,0.5,1);
@@ -75,13 +69,25 @@ public:
 				glTranslated(0,-0.2,0);
 				glRotated(-30,0,1,0);
 			}
-			glPopMatrix();
+		}
+		else if ( item=='Y' )
+		{
+			glRotated((GetTickCount()/10)%360,0,1,0);
+			glTranslated(0,-0.2,0);
+			glColor3d(0,1,0);
+			for (int i=12; i<=13; i++)
+			{
+				Draw3DString(i);
+				glTranslated(0,-0.3,0);
+				glRotated(-150,0,1,0);
+			}
 		}
 
 		glDisable(GL_TEXTURE_GEN_S);                // 使用自动生成纹理
 		glDisable(GL_TEXTURE_GEN_T);   
 		glDisable(GL_BLEND);
 		glColor3d(1,1,1);
+		glPopMatrix();
 	}
 
     //在屏幕上渲染解说词。
@@ -218,8 +224,10 @@ private:
     void Draw3DString(int line){
 		glPushMatrix();
 		double scale = 1.0f/font3D[line].size();
-		glScaled( scale, pow(scale,0.75), pow(scale,0.75) );
-		glTranslated(-0.5*font3D[line].size(),0,0);
+		glScaled( scale, pow(scale,0.8), pow(scale,0.8) );
+
+		// -0.5 is for pure chinese characters; -0.25 is for pure ascii
+		glTranslated(-0.4*font3D[line].size(),0,0);
 
 		for (unsigned i=0; i<font3D[line].size(); i++)
 		{

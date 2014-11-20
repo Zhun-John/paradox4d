@@ -18,7 +18,10 @@ void ETips::Init()
     font3D.push_back( Build3DText("有时你会发现") );
     font3D.push_back( Build3DText("你会突然跳出这世界") );
     font3D.push_back( Build3DText("发现原来，曾经的一切") );
-    font3D.push_back( Build3DText("不过就这么大点地方") );
+	font3D.push_back( Build3DText("不过就这么大点地方") );
+// 3D台词 索引从 12 开始
+	font3D.push_back( Build3DText("空格上升") );
+	font3D.push_back( Build3DText("Shift下降") );
     
 
 	
@@ -72,6 +75,25 @@ void ETips::Init()
     fontHud.push_back( BuildHudText(" ") );
 	fontHud.push_back( BuildHudText(" ") );
 // Hud台词（一行） 索引从 40 开始
-	fontHud.push_back(BuildHudText("咦？左右两侧是不同的空间？"));
+	fontHud.push_back(BuildHudText("咦？左右两侧是不同的空间？"));//a
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );//h
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );//m
+// Hud台词（两行） 索引从 53 开始
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );
 
 }

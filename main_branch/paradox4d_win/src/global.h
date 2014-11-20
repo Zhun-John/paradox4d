@@ -1,9 +1,9 @@
 #pragma once
 
-#include <gl/glut.h>
-#include <gl/glaux.h>
 #include <stdio.h>
-#include <stdlib.h>		
+#include <stdlib.h>	
+#include "glut.h"
+#include "glaux.h"
 #include <math.h>
 #include <windows.h>
 #include <winuser.h>

@@ -15,9 +15,6 @@
 #define WINDOW_HEI 600		// ÆÁÄ»¸ß¶È
 
 #pragma comment(lib,"GLAUX.LIB")
-#pragma comment(lib,"GLU32.LIB")
-#pragma comment(lib,"glut32.lib")
-#pragma comment(lib,"glut.lib")
 
 CglResouce glRes;
 EMaze4D maze;
@@ -104,7 +101,10 @@ void KeyDown(unsigned char key, int a, int b){
             InitLevel(portal);
             return;
         }
-        break;
+		break;
+	//case GLUT_WHEEL_UP:
+	//	Move(0,0,1);
+	//	break;
     default:
         break;
     }

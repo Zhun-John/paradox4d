@@ -40,7 +40,6 @@ public:
 		glEnable(GL_DEPTH_TEST); // Enables Depth Testing
 		glDepthFunc(GL_LEQUAL); // The Type Of Depth Testing To Do
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-		glMatrixMode( GL_PROJECTION );
 
 
 		glEnable(GL_LIGHTING);
