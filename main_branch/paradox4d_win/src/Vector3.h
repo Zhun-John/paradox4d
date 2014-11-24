@@ -33,9 +33,9 @@ public:
 	}			
 	// 求法向量（同方向的单位向量）
 	CVector3 Normal()const{
-		CVector3 res(*this);
-		res.Normalize();
-		return res;
+		CVector3 v(*this);
+		v.Normalize();
+		return v;
 	}	
 
 public:
@@ -61,7 +61,7 @@ public:
 	}		
 	// 向量叉积
 	static CVector3 CrossProduct( const CVector3 &left, const CVector3 &right){
-		return CVector3(	left.y*right.z - left.z*right.y,
+		return CVector3(left.y*right.z - left.z*right.y,
 						left.z*right.x - left.x*right.z,
 						left.x*right.y - left.y*right.x);
 	}

@@ -2,9 +2,6 @@
 #include "global.h"
 #include "Vector3.h"
 #include "Index4.h"
-#include "glResouce.h"
-
-extern class CglResouce glRes;
 
 class EMaze4D
 {
@@ -18,8 +15,7 @@ public:
 public:
     EMaze4D(void):data(NULL){};
     ~EMaze4D(void){
-		if (data!=NULL)
-		{
+		if (data!=NULL){
 			free(data);
 			data=NULL;
 		}
@@ -36,53 +32,8 @@ public:
 	}
 
 public:
-    //初始化某一关的所有迷宫地形数据
-    void InitData(int level);
-
-    //渲染整个迷宫
-    void Render(char dim){
-		//此处遍历不宜改为CIndex4.Iterate，因其内有对坐标细节的改动
-		for( int iz=0; iz<size.z; iz++ )
-		 for( int iy=0; iy<size.y; iy++ )
-		  for( int ix=0; ix<size.x-1; ix++ )
-			//仅对非墙的方格，即玩家可见区域，进行绘制
-			if (*DataAt(ix,iy,iz,dim)!='.')
-			{
-				glPushMatrix();
-				glTranslated( (ix+0.5), (iy+0.5), (iz+0.5) );
-				glColor3d(1,1,1);
-
-				// Y方向的墙
-				if( *DataAt(ix,iy-1,iz,dim)=='.' ){
-					glCallList( glRes.LwallY );
-				}
-				if( *DataAt(ix,iy+1,iz,dim)=='.' ){
-					glRotated( 180, 0.0f,0.0f,1.0f );
-					glCallList( glRes.LwallY );
-					glRotated( -180, 0.0f,0.0f,1.0f );
-				}
-
-				// Z方向的天花板、地板
-				if( *DataAt(ix,iy,iz-1,dim)=='.' ){
-					glCallList( glRes.Lground );
-				}
-				if( *DataAt(ix,iy,iz+1,dim)=='.' ){
-					glCallList( glRes.Lceiling );
-				}
-
-				// X方向的墙
-				if( *DataAt(ix-1,iy,iz,dim)=='.' ){
-					glCallList( glRes.LwallX );
-				}
-				if( *DataAt(ix+1,iy,iz,dim)=='.' ){
-					glRotated( 180, 0.0f,0.0f,1.0f );
-					glCallList( glRes.LwallX );
-					glRotated( -180, 0.0f,0.0f,1.0f );
-				}
-
-				glPopMatrix();
-			}
-	}
+    //载入某一关的所有迷宫地形数据
+    void LoadData(int level);
 
     //获得每关的初始位置及维度。参数为true返回起点，为false返回终点
 	CVector3 GetInitPosition(bool startPosition){

@@ -10,9 +10,7 @@
 #include "Vector3.h"
 #include "Player.h"
 #include "Progression.h"
-
-#define WINDOW_WID 800		// 屏幕宽度
-#define WINDOW_HEI 600		// 屏幕高度
+#include "Renderer.h"
 
 #pragma comment(lib,"GLAUX.LIB")
 
@@ -47,8 +45,8 @@ void InitLevel( int portal=1 ){
 		case 6:camera = &plain2Dcamera;break;
 		default:break;
     }
-    maze.InitData(prog.currentLevel);
-    items.Init(prog.currentLevel);
+    maze.LoadData(prog.currentLevel);
+    items.LoadData(prog.currentLevel);
 
     camera->pos = maze.GetInitPosition(portal==1);
 	player.dim = maze.GetInitDim(portal==1);
@@ -63,16 +61,16 @@ void MouseMove( int x, int y ){
 		int dx = x-lastx;
 		int dy = y-lasty;
 		if ( GetAsyncKeyState(VK_RBUTTON)&0x8000 ) // 按住右键，移动鼠标平移
-			Move( 0,-dx/5.0f,-dy/3.0f );
+			Move( 0,-dx/5,-dy/3 );
 		else
-			camera->Look( -dx/3.0f, -dy/3.0f ); //否则，转动视角
+			camera->Look( -dx/3, -dy/3 ); //否则，转动视角
 
-		if( x < 100 || x > WINDOW_WID - 100 ){
-			x = WINDOW_WID/2;
+		if( x < 100 || x > 300 ){
+			x = 200;
 			SetCursorPos( x,y );
 		}
-		if( y < 100 || y > WINDOW_HEI - 100 ){
-			y = WINDOW_HEI/2;
+		if( y < 100 || y > 300 ){
+			y = 200;
 			SetCursorPos( x,y );
 		}
 	}
@@ -81,12 +79,20 @@ void MouseMove( int x, int y ){
     lasty = y;
 }
 
+//glut鼠标按键、滚轮响应函数
+void MouseDown(int button, int state, int x, int y)
+{
+	// Wheel reports as button 3(scroll up) and button 4(scroll down)
+	if (button == 3) Move(0,0,5);
+	if (button == 4) Move(0,0,-5); 
+}
+
 //glut键盘响应函数
 void KeyDown(unsigned char key, int a, int b){
 	int portal =0;
     switch (key){
     case VK_ESCAPE:     // Esc键退出程序
-        exit(0);
+        glutLeaveMainLoop();
     case 'l':
         glEnable(GL_LIGHTING);
         break;
@@ -102,9 +108,6 @@ void KeyDown(unsigned char key, int a, int b){
             return;
         }
 		break;
-	//case GLUT_WHEEL_UP:
-	//	Move(0,0,1);
-	//	break;
     default:
         break;
     }
@@ -149,9 +152,9 @@ void Timer(int a){
 void Display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    camera->SetCamera(WINDOW_WID/WINDOW_HEI);
-    maze.Render(player.dim);
-    items.RenderAll3DItem(player.dim);
+    camera->SetCamera();
+    Renderer::RenderMaze(maze, player.dim);
+    Renderer::Render3DItem(items, player.dim, maze.size, tips);
 	//glRes.DrawArrow();
 
 	//绘制屏幕边缘的方向指示箭头
@@ -161,7 +164,7 @@ void Display(void)
     // Hud屏幕打印另外建立了一个模型观察矩阵，必须放在最后，否则会影响前面的LookAt
 	CIndex4 currentIndex = player.GetCurrentIndex(camera->pos);
 	char currentItem = *(items.ItemAt(currentIndex));
-	tips.RenderHudTips(currentItem,camera->GetType(),prog.currentLevel, 
+	Renderer::RenderHudTips(currentItem,tips, camera->GetType(),prog.currentLevel, 
 		(prog.itemLocked[currentItem-'0']<2) );
 
     glutSwapBuffers();
@@ -171,16 +174,17 @@ void Display(void)
 int main( int argc, char **argv )
 {
     glutInit( &argc, argv );
-    glRes.InitOpenGL(WINDOW_WID,WINDOW_HEI);
+    Renderer::InitOpenGL();
 
     glutPassiveMotionFunc( MouseMove );
     glutMotionFunc( MouseMove );
+	glutMouseFunc( MouseDown );
     glutKeyboardFunc( KeyDown );
     glutTimerFunc( 30, Timer, 0 );
     glutDisplayFunc( Display );
 	
-    tips.Init();
-    InitLevel();
+    tips.LoadData();
+	InitLevel();
     glutMainLoop();
     return 0;
 }

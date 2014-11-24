@@ -60,6 +60,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ItemsData.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MazeData.cpp" />
     <ClCompile Include="src\TipsData.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="src\Plain2DCamera.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Progression.h" />
+    <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Tips.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>

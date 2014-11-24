@@ -13,14 +13,20 @@
     <Filter Include="Manager">
       <UniqueIdentifier>{c3a454bf-ee52-41d6-be85-a89bbf52546b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{dc953353-1779-4afd-aff4-29d3d5b9b542}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\MazeData.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\TipsData.cpp">
-      <Filter>OpenGL</Filter>
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MazeData.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ItemsData.cpp">
+      <Filter>Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +67,9 @@
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="src\Progression.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer.h">
       <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>

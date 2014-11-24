@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>	
-#include "glut.h"
+#include "freeglut.h"
 #include "glaux.h"
 #include <math.h>
 #include <windows.h>
@@ -10,7 +10,6 @@
 #include "wingdi.h"
 #include <assert.h>
 #include <vector>
-#include <map>
 using namespace std;
 
 #define M_PI			3.1415926535897932384

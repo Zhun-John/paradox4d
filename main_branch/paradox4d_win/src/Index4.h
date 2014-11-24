@@ -21,7 +21,7 @@ public:
 
 	//将位置转换为迷宫坐标。其d为默认值
 	static CIndex4 FromPosition(double posX, double posY, double posZ){
-		return CIndex4( floor(posX), floor(posY), floor(posZ) );
+		return CIndex4( (int)floor(posX), (int)floor(posY), (int)floor(posZ) );
 	}
 	void Reset(int X=0,int Y=0,int Z=0, char D=INDEX4_BASE){
 		x=X; y=Y; z=Z; d=D;

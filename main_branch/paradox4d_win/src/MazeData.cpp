@@ -1,7 +1,6 @@
 #include "Maze4D.h"
 
-//初始化某一关的所有迷宫地形数据
-void EMaze4D::InitData(int level)
+void EMaze4D::LoadData(int level)
 {
     // XYw型7x4立柱
     if (level==1)                                

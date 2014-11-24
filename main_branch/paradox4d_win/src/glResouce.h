@@ -6,9 +6,8 @@
 
 class CglResouce
 {
-private:
-    GLuint texture[IMG_SUM];		// 纹理
 public:
+    GLuint texture[IMG_SUM];		// 纹理
     GLuint LwallX,LwallY,Lceiling,Lground;		// 四种平面的显示列表
 public:
 	// 纹理： 0墙X 1墙Y 2天花板 3地板
@@ -22,44 +21,6 @@ public:
 	}
 
 public:
-	//初始化OpenGL
-	void InitOpenGL( int windowWidth, int windowHeight )
-	{
-		glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
-		glutInitWindowSize( windowWidth, windowHeight );
-		//glutInitWindowSize( 400, 300 );
-		glutInitWindowPosition( 0,0 );
-		glutCreateWindow( "paradox_4d" );
-		glutFullScreen();
-		glutSetCursor( GLUT_CURSOR_NONE );
-
-		glEnable(GL_TEXTURE_2D); // 启用纹理映射
-		glShadeModel(GL_SMOOTH); // Enable Smooth Shading
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Black Background
-		glClearDepth(1.0f); // Depth Buffer Setup
-		glEnable(GL_DEPTH_TEST); // Enables Depth Testing
-		glDepthFunc(GL_LEQUAL); // The Type Of Depth Testing To Do
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-
-
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-		float lightposition[] = {0.0, 10.0, 30.0, 1.0 };
-		float lightAmbient[] = { 0.5, 0.5, 0.5, 1 };
-		float lightDiffuse[] = { 1,1,1,1 };
-		float matAmbient[] = { 1,1,1,1 };
-		float matDiffuse[] = { 0,0,1,1 };
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
-		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
-		//glLightfv(GL_LIGHT0, GL_POSITION, lightposition);
-		glDisable(GL_LIGHTING);
-
-		LoadGLTextures(1);
-		BuildWall();
-	}
-
 	//画一个3D箭头（未完成）
 	void DrawArrow(){
 		glPushMatrix();
@@ -86,7 +47,6 @@ public:
 		glPopMatrix();
 	}
 
-private:
 	//载入第level关的纹理
     int LoadGLTextures(int level){
 		int SucessAmount = 0; // 纹理载入成功的数目
@@ -133,10 +93,10 @@ private:
 		glNewList( LwallX, GL_COMPILE );
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
 		glBegin( GL_QUADS );
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( neg,pos,pos );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( neg,neg,pos );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( neg,neg,neg );
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( neg,pos,neg );
+		glTexCoord2d(0.0, 0.0); glVertex3d( neg,pos,pos );
+		glTexCoord2d(1.0, 0.0); glVertex3d( neg,neg,pos );
+		glTexCoord2d(1.0, 1.0); glVertex3d( neg,neg,neg );
+		glTexCoord2d(0.0, 1.0); glVertex3d( neg,pos,neg );
 		glEnd();
 		glEndList();
 
@@ -145,10 +105,10 @@ private:
 		glNewList( LwallY, GL_COMPILE );
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 		glBegin( GL_QUADS );
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( pos,neg,pos );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( neg,neg,pos );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( neg,neg,neg );
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( pos,neg,neg );
+		glTexCoord2d(0.0, 0.0); glVertex3d( pos,neg,pos );
+		glTexCoord2d(1.0, 0.0); glVertex3d( neg,neg,pos );
+		glTexCoord2d(1.0, 1.0); glVertex3d( neg,neg,neg );
+		glTexCoord2d(0.0, 1.0); glVertex3d( pos,neg,neg );
 		glEnd();
 		glEndList();
 
@@ -157,10 +117,10 @@ private:
 		glNewList( Lceiling, GL_COMPILE );
 		glBindTexture(GL_TEXTURE_2D, texture[2]);
 		glBegin( GL_QUADS );
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( neg,pos,pos*nearly );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( pos,pos,pos*nearly );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( pos,neg,pos*nearly );
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( neg,neg,pos*nearly );
+		glTexCoord2d(0.0, 0.0); glVertex3d( neg,pos,pos*nearly );
+		glTexCoord2d(1.0, 0.0); glVertex3d( pos,pos,pos*nearly );
+		glTexCoord2d(1.0, 1.0); glVertex3d( pos,neg,pos*nearly );
+		glTexCoord2d(0.0, 1.0); glVertex3d( neg,neg,pos*nearly );
 		glEnd();
 		glEndList();
 
@@ -169,10 +129,10 @@ private:
 		glNewList( Lground, GL_COMPILE );
 		glBindTexture(GL_TEXTURE_2D, texture[3]);
 		glBegin( GL_QUADS );
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( neg,neg,neg*nearly );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( pos,neg,neg*nearly );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( pos,pos,neg*nearly );
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( neg,pos,neg*nearly );
+		glTexCoord2d(0.0, 0.0); glVertex3d( neg,neg,neg*nearly );
+		glTexCoord2d(1.0, 0.0); glVertex3d( pos,neg,neg*nearly );
+		glTexCoord2d(1.0, 1.0); glVertex3d( pos,pos,neg*nearly );
+		glTexCoord2d(0.0, 1.0); glVertex3d( neg,pos,neg*nearly );
 		glEnd();
 		glEndList();
 	}

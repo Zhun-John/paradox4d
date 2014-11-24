@@ -27,10 +27,10 @@ public:
 	}
 
     //架设摄影机，即在OpenGL中变换模型视图矩阵
-	void SetCamera(double aspect){
+	void SetCamera(){
 		glMatrixMode( GL_PROJECTION );// projection matrix is lens of camera
 		glLoadIdentity();
-		gluPerspective( 110.0f, aspect, 0.05f, 9999.0f );
+		gluPerspective( 100.0, 1.5, 0.05f, 9999.0f );
 		glMatrixMode( GL_MODELVIEW );// modelview matrix is position of camera
 		gluLookAt(pos.x, pos.y, pos.z, pos.x+ori.x, pos.y+ori.y, pos.z+ori.z, up.x, up.y, up.z );
 	}

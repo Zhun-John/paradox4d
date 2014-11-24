@@ -1,6 +1,6 @@
 #include "Tips.h"
 
-void ETips::Init()
+void ETips::LoadData()
 {
 	BuildFont("ΊΪΜε",40,40,0,0,0);
 

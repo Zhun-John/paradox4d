@@ -63,13 +63,15 @@
 2.s 完善文档和注释；调整VS工程结构；
 2.t 将OpenGL的h/lib/dll都放到项目内，亲测删去VC/lib和VC/include和system32内的OpenGL文件，可以正常Build并运行；
 2.u 修复glPushMatrix栈溢出问题（换用MODELVIEW矩阵）；第三关摆了一个3D台词
-
+2.v 换用freeglut；移除ipch文件夹；应用GameMode（全屏最高分辩率）；添加鼠标滚轮上升下降；固定透视椎体顶角为150/100度；
+2.w 无warning；新建Renderer类负责渲染操作，Item4D/Maze4D提纯为数据类；
+2.x 取消GameMode使启动更流畅（用宏注释掉）；Tips提纯为数据类；
 
 
 【Future...】
+Tips提纯为数据类，考虑Render和glRes的关系，glRes是否仅仅是纹理？纹理仅用于迷宫？
 台词弹出对话框，隔一段时间后消失（目前仅在接触物体时显示，很容易被玩家忽略）
     考虑界面框架，NGUI或？？
 添加Timer.deltaTime，用于移动及台词弹出
 Gizmo指向箭头，用于free和auto摄影机
 Auto可按键锁定
-平面摄影机：鼠标滚轮

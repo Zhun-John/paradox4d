@@ -2,12 +2,9 @@
 #include "global.h"
 #include "Vector3.h"
 #include "Index4.h"
-
 #include "Maze4D.h"
-#include "Tips.h"
 
 extern class EMaze4D maze;
-extern class ETips tips;
 
 //四维迷宫中的所有物体。每个方格最多放一个物体，每个物体只能放在一个方格中（一对一关系）
 class EItem4D
@@ -17,13 +14,13 @@ private:
 public:
 	EItem4D(void):data(NULL){};
 	~EItem4D(void){
-		if (data!=NULL)
-		{
+		if (data!=NULL){
 			free(data);
 			data=NULL;
 		}
     }
-    //访问四维数组元素值。入参必须合法
+    
+	//访问四维数组元素值。入参必须合法
     char* ItemAt(int x,int y,int z,char d){
 		return ItemAt( CIndex4(x,y,z,d) );
 	}
@@ -32,71 +29,8 @@ public:
 	}
 
 public:
-    //初始化某一关的所有物体位置数据
-    void Init(int level){
-		if (data) free(data);
-		int dataSize = maze.size.Capacity();
-		data = (char*)malloc( dataSize );
-		if (!data) exit(0);
-
-		memset(data,'\0',dataSize);
-		PlaceItem('{',maze.start);
-		PlaceItem('}',maze.end);
-
-		if (level==1)
-		{
-			PlaceItem('a',1,2,0,'A');
-			PlaceItem('1',4,2,0,'F');
-			PlaceItem('2',4,2,0,'I');
-			PlaceItem('3',2,1,0,'H');
-		}
-		else if (level==2)
-		{
-			PlaceItem('4',2,2,0,'G');
-			PlaceItem('Z',2,3,0,'T');
-		}
-		else if (level==3)
-		{
-			PlaceItem('Y',3,4,0,'A');
-			PlaceItem('b',2,2,6,'A');
-			PlaceItem('c',2,2,7,'A');
-			PlaceItem('d',0,0,7,'A');
-		}
-		else if (level==4)
-		{
-			PlaceItem('b',3,2,2,'A');
-			PlaceItem('c',0,2,0,'A');
-			PlaceItem('d',4,4,4,'A');
-		}
-		else if (level==5)
-		{
-			PlaceItem('a',4,5,3,'A');
-			PlaceItem('b',2,1,5,'A');
-/*	//原立柱关的物品
-			PlaceItem('a',1,2,0,'A');
-			PlaceItem('b',5,3,0,'I');
-			PlaceItem('c',5,1,0,'F');
-			PlaceItem('d',3,1,0,'H');
-			PlaceItem('e',1,1,0,'H');*/
-		}
-
-	}
-
-    //渲染所有3D字体
-    void RenderAll3DItem(char dim){
-		CIndex4 i(0,0,0,dim);
-		CIndex4 size(maze.size);
-		size.d = dim+1;
-		do{
-			glPushMatrix();
-			glTranslated( (i.x+0.5), (i.y+0.5), (i.z+0.5) );
-			glRotated(90,1,0,0);
-
-			tips.Render3DTips( *ItemAt(i));
-
-			glPopMatrix();
-		}while( !i.IterateInside(size) );
-	}
+	//载入某一关的所有物体位置数据
+	void LoadData(int level);
 
     // 在能看到此物体的所有四维层的相应位置，写入此物体item
     void PlaceItem(char item, int x,int y,int z,char d){
