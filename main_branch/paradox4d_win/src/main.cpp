@@ -1,5 +1,5 @@
 #include "global.h"
-#include "Tips.h"
+#include "glFonts.h"
 #include "Items4D.h"
 #include "Camera.h"
 #include "Maze4D.h"
@@ -16,7 +16,7 @@
 
 CglResouce glRes;
 EMaze4D maze;
-ETips tips;
+CglFonts fonts;
 EItem4D items;
 CPlayer player;
 CProgression prog;
@@ -33,8 +33,8 @@ void Move( int stepsToForward, int stepsToLeft, int stepsToUp ){
 	prog.OnItem( *items.ItemAt(i) );
 }
 
-//初始化关卡，portal为1代表正常过关，即从上一关的终点切换到下一关起点，-1为反向
-void InitLevel( int portal=1 ){
+//去下一关。参数为true为正常过关，从起点开始；为false则从终点开始
+void NextLevel( bool toStartPos=true ){
     switch (prog.currentLevel)
     {
 		case 1:camera = &plain2Dcamera;break;
@@ -48,8 +48,8 @@ void InitLevel( int portal=1 ){
     maze.LoadData(prog.currentLevel);
     items.LoadData(prog.currentLevel);
 
-    camera->pos = maze.GetInitPosition(portal==1);
-	player.dim = maze.GetInitDim(portal==1);
+    camera->pos = maze.GetInitPosition(toStartPos);
+	player.dim = maze.GetInitDim(toStartPos);
 	camera->InitCamera();
 }
 
@@ -104,7 +104,7 @@ void KeyDown(unsigned char key, int a, int b){
         if (portal)
         {
 			prog.ChangeLevel(portal);
-            InitLevel(portal);
+            NextLevel(portal==1);
             return;
         }
 		break;
@@ -154,7 +154,7 @@ void Display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     camera->SetCamera();
     Renderer::RenderMaze(maze, player.dim);
-    Renderer::Render3DItem(items, player.dim, maze.size, tips);
+    Renderer::Render3DItem(items, player.dim, maze.size, fonts);
 	//glRes.DrawArrow();
 
 	//绘制屏幕边缘的方向指示箭头
@@ -162,9 +162,8 @@ void Display(void)
 	//glRes.DrawArrow();
 
     // Hud屏幕打印另外建立了一个模型观察矩阵，必须放在最后，否则会影响前面的LookAt
-	CIndex4 currentIndex = player.GetCurrentIndex(camera->pos);
-	char currentItem = *(items.ItemAt(currentIndex));
-	Renderer::RenderHudTips(currentItem,tips, camera->GetType(),prog.currentLevel, 
+	char currentItem = *items.ItemAt( player.GetCurrentIndex(camera->pos) );
+	Renderer::RenderHudTips(currentItem,fonts, camera->GetType(),prog.currentLevel, 
 		(prog.itemLocked[currentItem-'0']<2) );
 
     glutSwapBuffers();
@@ -174,7 +173,9 @@ void Display(void)
 int main( int argc, char **argv )
 {
     glutInit( &argc, argv );
-    Renderer::InitOpenGL();
+	Renderer::InitOpenGL();
+	glRes.LoadData(1);
+	fonts.LoadData();
 
     glutPassiveMotionFunc( MouseMove );
     glutMotionFunc( MouseMove );
@@ -183,8 +184,7 @@ int main( int argc, char **argv )
     glutTimerFunc( 30, Timer, 0 );
     glutDisplayFunc( Display );
 	
-    tips.LoadData();
-	InitLevel();
+	NextLevel();
     glutMainLoop();
     return 0;
 }

@@ -66,11 +66,14 @@
 2.v 换用freeglut；移除ipch文件夹；应用GameMode（全屏最高分辩率）；添加鼠标滚轮上升下降；固定透视椎体顶角为150/100度；
 2.w 无warning；新建Renderer类负责渲染操作，Item4D/Maze4D提纯为数据类；
 2.x 取消GameMode使启动更流畅（用宏注释掉）；Tips提纯为数据类；
+2.y 重构渲染模块（Tips改为glFonts，glRes里应用enum）；补全资源释放操作；main里NextLevel参数改为bool
+2.z 修复Bug（没有屏幕字体）；从第1关开始；
+
 
 
 【Future...】
-Tips提纯为数据类，考虑Render和glRes的关系，glRes是否仅仅是纹理？纹理仅用于迷宫？
-台词弹出对话框，隔一段时间后消失（目前仅在接触物体时显示，很容易被玩家忽略）
+2.A0-Az, 2.B00-Bzz, 2.C000-Czzz...
+台词弹出对话框和头像，隔一段时间后消失（目前仅在接触物体时显示，很容易被玩家忽略）
     考虑界面框架，NGUI或？？
 添加Timer.deltaTime，用于移动及台词弹出
 Gizmo指向箭头，用于free和auto摄影机

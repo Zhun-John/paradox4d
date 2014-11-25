@@ -2,7 +2,7 @@
 #include "Maze4D.h"
 #include "Items4D.h"
 #include "glResouce.h"
-#include "Tips.h"
+#include "glFonts.h"
 
 extern class CglResouce glRes;
 
@@ -13,7 +13,6 @@ public:
 	~Renderer(void){}
 
 public:
-
 	//初始化OpenGL
 	static void InitOpenGL()
 	{
@@ -53,9 +52,6 @@ public:
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
 		//glLightfv(GL_LIGHT0, GL_POSITION, lightposition);
 		glDisable(GL_LIGHTING);
-
-		glRes.LoadGLTextures(1);
-		glRes.BuildWall();
 	}
 
 	//渲染第dim层的整个迷宫
@@ -73,29 +69,29 @@ public:
 
 						// Y方向的墙
 						if( *maze.DataAt(ix,iy-1,iz,dim)=='.' ){
-							glCallList( glRes.LwallY );
+							glRes.DrawWall(GW_WALL_Y);
 						}
 						if( *maze.DataAt(ix,iy+1,iz,dim)=='.' ){
 							glRotated( 180, 0.0f,0.0f,1.0f );
-							glCallList( glRes.LwallY );
+							glRes.DrawWall(GW_WALL_Y);
 							glRotated( -180, 0.0f,0.0f,1.0f );
 						}
 
 						// Z方向的天花板、地板
 						if( *maze.DataAt(ix,iy,iz-1,dim)=='.' ){
-							glCallList( glRes.Lground );
+							glRes.DrawWall(GW_GROUND);
 						}
 						if( *maze.DataAt(ix,iy,iz+1,dim)=='.' ){
-							glCallList( glRes.Lceiling );
+							glRes.DrawWall(GW_CEILING);
 						}
 
 						// X方向的墙
 						if( *maze.DataAt(ix-1,iy,iz,dim)=='.' ){
-							glCallList( glRes.LwallX );
+							glRes.DrawWall(GW_WALL_X);
 						}
 						if( *maze.DataAt(ix+1,iy,iz,dim)=='.' ){
 							glRotated( 180, 0.0f,0.0f,1.0f );
-							glCallList( glRes.LwallX );
+							glRes.DrawWall(GW_WALL_X);
 							glRotated( -180, 0.0f,0.0f,1.0f );
 						}
 
@@ -104,7 +100,7 @@ public:
 	}
 
 	//渲染dim层的所有3D物体
-	static void Render3DItem( EItem4D &item, char dim, CIndex4 size, ETips &tips){
+	static void Render3DItem( EItem4D &item, char dim, CIndex4 size, CglFonts &tips){
 		CIndex4 i(0,0,0,dim);
 		size.d = dim+1;
 		do{
@@ -119,7 +115,8 @@ public:
 	}
 
     //根据物体，在屏幕上渲染解说词
-    static void RenderHudTips(char item, ETips &tips,int cameraType,int level,bool showHudOnWaypoint){
+    static void RenderHudTips(char item, CglFonts &fonts,int cameraType,int level,bool showHudOnWaypoint){
+		glMatrixMode(GL_PROJECTION);//否则屏幕字体渲染不出来
 		glLoadIdentity();
 		glColor3d(0.6,1,0.6);
 		glDisable(GL_TEXTURE_2D);//否则字体是灰色，达不到纯白
@@ -128,24 +125,24 @@ public:
 		//map< char, vector<string> >::iterator it = fontHud.find('=');
 		//永久显示关卡信息
 		glRasterPos2d(-0.2,-0.9);
-		tips.DrawHudString(16+level-1);
+		fonts.DrawHudString(16+level-1);
 		glRasterPos2d(0.6,-0.9);
-		tips.DrawHudString(0+cameraType);
+		fonts.DrawHudString(0+cameraType);
 
 		//显示起点或终点的文字
 		if( item=='{' || item=='}' ){
 			glRasterPos2d(-0.9,-0.7);
-			tips.DrawHudString( (item=='{'?24:32) +level-1);
+			fonts.DrawHudString( (item=='{'?24:32) +level-1);
 		}
 		//显示一行文字
 		else if( item>='a' && item<='m' ){
 			glRasterPos2d(-0.9,-0.7);
-			tips.DrawHudString( 40 +item-'a');
+			fonts.DrawHudString( 40 +item-'a');
 		}
 		//显示数字物体对应的台词
 		else if( item>='1' && item<='9' && showHudOnWaypoint ){
 			glRasterPos2d(-0.9,-0.7);
-			tips.DrawHudString( 6 +item-'0');
+			fonts.DrawHudString( 6 +item-'0');
 		}
 
 		//查找此物体是否触发解说词
@@ -164,7 +161,7 @@ public:
 
 private:
 	//根据物体，在空间中渲染其对应的3D文字
-	static void Render3DTips(char item, ETips &tips){
+	static void Render3DTips(char item, CglFonts &fonts){
 		glPushMatrix();
 		glEnable(GL_BLEND);	//透视/色
 		glBlendFunc(GL_DST_ALPHA,GL_ONE);
@@ -183,21 +180,21 @@ private:
 			glTranslated(-0.5,-0.7,0);
 			int i=item-'1';// i is in [0,8]
 			glColor3d( 1-i*0.125, 1-i*0.125, i*0.125);
-			tips.DrawRoadSign(item-'0');
+			fonts.DrawRoadSign(item-'0');
 		}
 		else if( item=='{' || item=='}' )//“起点” “终点”
 		{
 			glRotated((GetTickCount()/10)%360,0,1,0);
 			glTranslated(0,-0.7,0);
 			glColor3d((item=='}'), (item=='{'), 0);
-			tips.Draw3DString(item=='{'? 1:2);
+			fonts.Draw3DString(item=='{'? 1:2);
 		}
 		else if (item>='a' && item<='z')//"提示"
 		{
 			glRotated((GetTickCount()/10)%360,0,1,0);
 			glTranslated(0,-0.7,0);
 			glColor3d(1,0,1);
-			tips.Draw3DString(3);
+			fonts.Draw3DString(3);
 		}
 		// 3D字体台词
 		else if ( item=='Z' )
@@ -207,7 +204,7 @@ private:
 			glColor3d(0,0.5,1);
 			for (int i=8; i<=11; i++)
 			{
-				tips.Draw3DString(i);
+				fonts.Draw3DString(i);
 				glTranslated(0,-0.2,0);
 				glRotated(-30,0,1,0);
 			}
@@ -219,7 +216,7 @@ private:
 			glColor3d(0,1,0);
 			for (int i=12; i<=13; i++)
 			{
-				tips.Draw3DString(i);
+				fonts.Draw3DString(i);
 				glTranslated(0,-0.3,0);
 				glRotated(-150,0,1,0);
 			}

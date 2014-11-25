@@ -19,13 +19,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\TipsData.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
     <ClCompile Include="src\MazeData.cpp">
       <Filter>Data</Filter>
     </ClCompile>
     <ClCompile Include="src\ItemsData.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FontsData.cpp">
       <Filter>Data</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,9 +60,6 @@
     <ClInclude Include="src\glResouce.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tips.h">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\Player.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -70,7 +67,10 @@
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer.h">
-      <Filter>Manager</Filter>
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glFonts.h">
+      <Filter>OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

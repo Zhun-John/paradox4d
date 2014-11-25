@@ -2,25 +2,39 @@
 #include "global.h"
 
 // 所有提示文字信息，某些作为3D字体摆在空间中，某些以Hud字体打印在屏幕上
-class ETips
-{// Tips类职责是保存文字信息，并渲染Hud/3D文字。它不关注这些外部的坐标变换
+class CglFonts
+{
 private:
 	HFONT hFont;
-    //所有3D字体的显示列表，每个vector<int>为一行字
-    vector< vector<int> > font3D;
-    //所有Hud文字的显示列表，每个vector<int>为一行字
-    vector< vector<int> > fontHud;
+    vector< vector<int> > font3D; //所有3D字体的显示列表，每个vector<int>为一行字
+    vector< vector<int> > fontHud;//所有Hud文字的显示列表，每个vector<int>为一行字
 
 public:
-	ETips(void):hFont(NULL){};
-	~ETips(void){
+	CglFonts(void):hFont(NULL){};
+	~CglFonts(void){
 		if(hFont) DeleteObject(hFont);
+
+		while(!font3D.empty()){
+			while (!font3D.back().empty()){
+				glDeleteLists(1,font3D.back().back());
+				font3D.back().pop_back();
+			}
+			font3D.pop_back();
+		}
+		while(!fontHud.empty()){
+			while (!fontHud.back().empty()){
+				glDeleteLists(1,fontHud.back().back());
+				fontHud.back().pop_back();
+			}
+			fontHud.pop_back();
+		}
 	};
 
 public:
     //载入所有文字数据
 	void LoadData();
 
+	//渲染3D的路标（汉字一到九之一）
 	void DrawRoadSign(int n){
 		glCallList(font3D[0][n]);
 	}

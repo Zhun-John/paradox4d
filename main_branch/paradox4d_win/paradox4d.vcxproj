@@ -63,12 +63,13 @@
     <ClCompile Include="src\ItemsData.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MazeData.cpp" />
-    <ClCompile Include="src\TipsData.cpp" />
+    <ClCompile Include="src\FontsData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Auto3DCamera.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Free3DCamera.h" />
+    <ClInclude Include="src\glFonts.h" />
     <ClInclude Include="src\global.h" />
     <ClInclude Include="src\glResouce.h" />
     <ClInclude Include="src\Index4.h" />
@@ -78,7 +79,6 @@
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Progression.h" />
     <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\Tips.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,6 @@
-#include "Tips.h"
+#include "glFonts.h"
 
-void ETips::LoadData()
+void CglFonts::LoadData()
 {
 	BuildFont("黑体",40,40,0,0,0);
 
@@ -89,7 +89,7 @@ void ETips::LoadData()
 	fontHud.push_back( BuildHudText(" ") );
 	fontHud.push_back( BuildHudText(" ") );//m
 // Hud台词（两行） 索引从 53 开始
-	fontHud.push_back( BuildHudText(" ") );
+	fontHud.push_back( BuildHudText(" ") );//n
 	fontHud.push_back( BuildHudText(" ") );
 	fontHud.push_back( BuildHudText(" ") );
 	fontHud.push_back( BuildHudText(" ") );

@@ -1,26 +1,55 @@
 #pragma once
 #include "global.h"
 
-// 纹理： 0墙X 1墙Y 2天花板 3地板
-#define IMG_SUM 4			// 纹理总数
+enum GRES_WALL{
+	GW_WALL_X,
+	GW_WALL_Y,
+	GW_CEILING,
+	GW_GROUND,
+	GW_SUM
+} ;
 
 class CglResouce
 {
+private:
+    GLuint texture[GW_SUM];		// 纹理
+    GLuint wall[GW_SUM];		// 四种平面的显示列表
+
 public:
-    GLuint texture[IMG_SUM];		// 纹理
-    GLuint LwallX,LwallY,Lceiling,Lground;		// 四种平面的显示列表
-public:
-	// 纹理： 0墙X 1墙Y 2天花板 3地板
-    CglResouce():LwallX(0),LwallY(0),Lground(0),Lceiling(0){};
+    CglResouce(){
+		memset(texture,0,sizeof(texture));
+		memset(wall,0,sizeof(wall));
+	};
     ~CglResouce(){
-		glDeleteTextures(IMG_SUM,texture);
-		glDeleteLists(1,Lceiling);
-		glDeleteLists(1,Lground);
-		glDeleteLists(1,LwallX);
-		glDeleteLists(1,LwallY);
+		if(texture[0]!=0){
+			glDeleteTextures(GW_SUM,texture);
+			memset(texture,0,sizeof(texture));
+		}
+		if(wall[0]!=0){
+			glDeleteLists(GW_SUM,wall[0]);
+			memset(wall,0,sizeof(wall));
+		}
 	}
 
 public:
+	void LoadData(int level){
+		if(texture[0]!=0){
+			glDeleteTextures(GW_SUM,texture);
+			memset(texture,0,sizeof(texture));
+		}
+		if(wall[0]!=0){
+			glDeleteLists(GW_SUM,wall[0]);
+			memset(wall,0,sizeof(wall));
+		}
+
+		LoadGLTextures(level);
+		BuildWall();
+	}
+
+	void DrawWall(GRES_WALL id){
+		glCallList(wall[id]);
+	}
+
 	//画一个3D箭头（未完成）
 	void DrawArrow(){
 		glPushMatrix();
@@ -47,24 +76,25 @@ public:
 		glPopMatrix();
 	}
 
+private:
 	//载入第level关的纹理
     int LoadGLTextures(int level){
 		int SucessAmount = 0; // 纹理载入成功的数目
 		char s[30];
 
-		AUX_RGBImageRec *TextureImage[IMG_SUM]; // Create Storage Space For The Texture
+		AUX_RGBImageRec *TextureImage[GW_SUM]; // Create Storage Space For The Texture
 
 		sprintf_s(s,"texture/%d wall x.bmp",level);
-		TextureImage[ 0 ]=auxDIBImageLoad( s ); // 墙X
+		TextureImage[ GW_WALL_X ]=auxDIBImageLoad( s ); // 墙X
 		sprintf_s(s,"texture/%d wall y.bmp",level);
-		TextureImage[ 1 ]=auxDIBImageLoad( s ); // 墙Y
+		TextureImage[ GW_WALL_Y ]=auxDIBImageLoad( s ); // 墙Y
 		sprintf_s(s,"texture/%d ceiling.bmp",level);
-		TextureImage[ 2 ]=auxDIBImageLoad( s ); // 天花板
+		TextureImage[ GW_CEILING ]=auxDIBImageLoad( s ); // 天花板
 		sprintf_s(s,"texture/%d ground.bmp",level);
-		TextureImage[ 3 ]=auxDIBImageLoad( s ); // 地板
+		TextureImage[ GW_GROUND ]=auxDIBImageLoad( s ); // 地板
 
-		glGenTextures(IMG_SUM, texture); // Create The Texture
-		for( int i=0; i<IMG_SUM; i++ ){ // 检查所有纹理是否载入成功，并生成纹理
+		glGenTextures(GW_SUM, texture); // Create The Texture
+		for( int i=0; i<GW_SUM; i++ ){ // 检查所有纹理是否载入成功，并生成纹理
 			if( TextureImage[i] && TextureImage[i]->data){
 				SucessAmount++; // 成功载入一个纹理
 				glBindTexture(GL_TEXTURE_2D, texture[i]);
@@ -80,18 +110,18 @@ public:
 			}// if
 		}// for
 
-		return (SucessAmount == IMG_SUM); // Return The Status
+		return (SucessAmount == GW_SUM); // Return The Status
 	}
 
 	// 建立所有墙面的显示列表
     void BuildWall(){
-		double pos=0.5f,neg=-0.5f;
-		double nearly=0.99999f;
+		double pos=0.5,neg=-0.5;
+		double nearly=0.99999;
+		glGenTextures(GW_SUM, wall); // Create The Texture
 
 		// 墙X，在x轴负方向
-		LwallX = glGenLists(1);
-		glNewList( LwallX, GL_COMPILE );
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
+		glNewList( wall[GW_WALL_X], GL_COMPILE );
+		glBindTexture(GL_TEXTURE_2D, texture[GW_WALL_X]);
 		glBegin( GL_QUADS );
 		glTexCoord2d(0.0, 0.0); glVertex3d( neg,pos,pos );
 		glTexCoord2d(1.0, 0.0); glVertex3d( neg,neg,pos );
@@ -101,9 +131,8 @@ public:
 		glEndList();
 
 		// 墙Y，在Y轴负方向
-		LwallY = glGenLists(1);
-		glNewList( LwallY, GL_COMPILE );
-		glBindTexture(GL_TEXTURE_2D, texture[1]);
+		glNewList( wall[GW_WALL_Y], GL_COMPILE );
+		glBindTexture(GL_TEXTURE_2D, texture[GW_WALL_Y]);
 		glBegin( GL_QUADS );
 		glTexCoord2d(0.0, 0.0); glVertex3d( pos,neg,pos );
 		glTexCoord2d(1.0, 0.0); glVertex3d( neg,neg,pos );
@@ -113,9 +142,8 @@ public:
 		glEndList();
 
 		// 天花板，在Z轴正方向
-		Lceiling = glGenLists(1);
-		glNewList( Lceiling, GL_COMPILE );
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glNewList( wall[GW_CEILING], GL_COMPILE );
+		glBindTexture(GL_TEXTURE_2D, texture[GW_CEILING]);
 		glBegin( GL_QUADS );
 		glTexCoord2d(0.0, 0.0); glVertex3d( neg,pos,pos*nearly );
 		glTexCoord2d(1.0, 0.0); glVertex3d( pos,pos,pos*nearly );
@@ -125,9 +153,8 @@ public:
 		glEndList();
 
 		// 地板，在Z轴负向
-		Lground = glGenLists(1);
-		glNewList( Lground, GL_COMPILE );
-		glBindTexture(GL_TEXTURE_2D, texture[3]);
+		glNewList( wall[GW_GROUND], GL_COMPILE );
+		glBindTexture(GL_TEXTURE_2D, texture[GW_GROUND]);
 		glBegin( GL_QUADS );
 		glTexCoord2d(0.0, 0.0); glVertex3d( neg,neg,neg*nearly );
 		glTexCoord2d(1.0, 0.0); glVertex3d( pos,neg,neg*nearly );
