@@ -5,6 +5,7 @@
 #include "glFonts.h"
 
 extern class CglResouce glRes;
+extern class CglFonts fonts;
 
 class Renderer
 {
@@ -16,7 +17,7 @@ public:
 	//初始化OpenGL
 	static void InitOpenGL()
 	{
-		glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
+		glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
 #ifdef _USE_GAMEMODE
 		char mode_string[20];
 		sprintf_s(mode_string,"%dx%d:32@60", glutGet(GLUT_SCREEN_WIDTH),glutGet(GLUT_SCREEN_HEIGHT));
@@ -54,6 +55,14 @@ public:
 		glDisable(GL_LIGHTING);
 	}
 
+	static void ResetCamera(){
+		glMatrixMode(GL_PROJECTION);//否则屏幕字体渲染不出来
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
+
+public:
 	//渲染第dim层的整个迷宫
 	static void RenderMaze( EMaze4D& maze, char dim){
 		//此处遍历不宜改为CIndex4.Iterate，因其内有对坐标细节的改动
@@ -100,7 +109,7 @@ public:
 	}
 
 	//渲染dim层的所有3D物体
-	static void Render3DItem( EItem4D &item, char dim, CIndex4 size, CglFonts &tips){
+	static void Render3DItem( EItem4D &item, char dim, CIndex4 size){
 		CIndex4 i(0,0,0,dim);
 		size.d = dim+1;
 		do{
@@ -108,19 +117,19 @@ public:
 			glTranslated( (i.x+0.5), (i.y+0.5), (i.z+0.5) );
 			glRotated(90,1,0,0);
 
-			Render3DTips( *item.ItemAt(i),tips );
+			Render3DTips( *item.ItemAt(i) );
 
 			glPopMatrix();
 		}while( !i.IterateInside(size) );
 	}
 
     //根据物体，在屏幕上渲染解说词
-    static void RenderHudTips(char item, CglFonts &fonts,int cameraType,int level,bool showHudOnWaypoint){
-		glMatrixMode(GL_PROJECTION);//否则屏幕字体渲染不出来
-		glLoadIdentity();
-		glColor3d(0.6,1,0.6);
+    static void RenderHud(char item,int cameraType,int level,bool showHudOnWaypoint){
+		glPushMatrix();
+		glPushAttrib(GL_ENABLE_BIT);
 		glDisable(GL_TEXTURE_2D);//否则字体是灰色，达不到纯白
 		glDisable(GL_DEPTH_TEST);//否则会被盖住
+		glColor3d(0.6,1,0.6);
 
 		//map< char, vector<string> >::iterator it = fontHud.find('=');
 		//永久显示关卡信息
@@ -155,14 +164,15 @@ public:
 				glRes.BuildHudText(it->second.at(i).c_str());
 			}
 		}*/
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_DEPTH_TEST);
+		glPopAttrib();
+		glPopMatrix();
 	}
 
 private:
 	//根据物体，在空间中渲染其对应的3D文字
-	static void Render3DTips(char item, CglFonts &fonts){
+	static void Render3DTips(char item){
 		glPushMatrix();
+		glPushAttrib(GL_ENABLE_BIT);
 		glEnable(GL_BLEND);	//透视/色
 		glBlendFunc(GL_DST_ALPHA,GL_ONE);
 		glEnable(GL_TEXTURE_2D);
@@ -222,10 +232,8 @@ private:
 			}
 		}
 
-		glDisable(GL_TEXTURE_GEN_S);                // 使用自动生成纹理
-		glDisable(GL_TEXTURE_GEN_T);   
-		glDisable(GL_BLEND);
 		glColor3d(1,1,1);
+		glPopAttrib();
 		glPopMatrix();
 	}
 

@@ -32,6 +32,7 @@ public:
 		glLoadIdentity();
 		gluPerspective( 100.0, 1.5, 0.05f, 9999.0f );
 		glMatrixMode( GL_MODELVIEW );// modelview matrix is position of camera
+		glLoadIdentity();
 		gluLookAt(pos.x, pos.y, pos.z, pos.x+ori.x, pos.y+ori.y, pos.z+ori.z, up.x, up.y, up.z );
 	}
 

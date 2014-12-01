@@ -68,11 +68,14 @@
 2.x 取消GameMode使启动更流畅（用宏注释掉）；Tips提纯为数据类；
 2.y 重构渲染模块（Tips改为glFonts，glRes里应用enum）；补全资源释放操作；main里NextLevel参数改为bool
 2.z 修复Bug（没有屏幕字体）；从第1关开始；
-
-
+2.A0 fonts只在Renderer内通过extern访问；修改文件夹名；
+2.A1 添加对话框，有待优化；
+2.A2 取消纹理，硬是用SolidCube画了一个屏幕对话框。。。需要透明效果
+2.A3 实现对话框透明，但目前是永久显示；在所有渲染前后套上glPushAttrib和glPushMatrix吼吼~~
 
 【Future...】
-2.A0-Az, 2.B00-Bzz, 2.C000-Czzz...
+考虑加入libpng，载入NPC头像
+考虑xml配置台词，位置、分行、中英文
 台词弹出对话框和头像，隔一段时间后消失（目前仅在接触物体时显示，很容易被玩家忽略）
     考虑界面框架，NGUI或？？
 添加Timer.deltaTime，用于移动及台词弹出

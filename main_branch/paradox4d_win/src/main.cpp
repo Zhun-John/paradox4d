@@ -154,16 +154,16 @@ void Display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     camera->SetCamera();
     Renderer::RenderMaze(maze, player.dim);
-    Renderer::Render3DItem(items, player.dim, maze.size, fonts);
-	//glRes.DrawArrow();
+    Renderer::Render3DItem(items, player.dim, maze.size);
 
 	//绘制屏幕边缘的方向指示箭头
-	glLoadIdentity();
 	//glRes.DrawArrow();
+	Renderer::ResetCamera();
 
+	glRes.DrawDialog();
     // Hud屏幕打印另外建立了一个模型观察矩阵，必须放在最后，否则会影响前面的LookAt
 	char currentItem = *items.ItemAt( player.GetCurrentIndex(camera->pos) );
-	Renderer::RenderHudTips(currentItem,fonts, camera->GetType(),prog.currentLevel, 
+	Renderer::RenderHud(currentItem, camera->GetType(),prog.currentLevel, 
 		(prog.itemLocked[currentItem-'0']<2) );
 
     glutSwapBuffers();
